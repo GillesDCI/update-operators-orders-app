@@ -98,7 +98,7 @@ router.patch('/favorites/add/one/unique/:id', async (req, res) => {
     }
 });
 
-//updating the document partly (removing one favorite at a time)
+// updating the document partly (removing one favorite at a time)
 // URL: http://localhost:4000/api/users/favorites/remove/one/USERID:Mongoose.Schema.ObjectId
 // HTTP BODY : EMPTY
 //
@@ -108,6 +108,8 @@ router.patch('/favorites/remove/one/:id', async (req, res) => {
 
     try {
         //remove a value from the array. 
+        //-1 deletes the first element. 
+        //1 deletes the last element. 
         const updatedUser = await User.findByIdAndUpdate(id, { $pop:{favorites:1}}, {new:true})
 
         if(!updatedUser) return res.status(404).json({message: 'User not found'});
@@ -145,14 +147,13 @@ router.patch('/update/:id', async (req, res) => {
 
 // remove the field of the document (remove a field)
 // URL: http://localhost:4000/api/users/update/removefield/USERID:Mongoose.Schema.ObjectId
-// HTTP BODY : {"username":"test"}
-//
+// HTTP BODY : EMPTY
 router.patch('/update/removefield/:id', async (req, res) => {
 
     const { id } = req.params;
 
     try {
-        //remove a value from the array. 
+        //remove a key/value from the array. 
         const updatedUser = await User.findByIdAndUpdate(id, { $unset:{username:""}}, {new:true})
 
         if(!updatedUser) return res.status(404).json({message: 'User not found'});
